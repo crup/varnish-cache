@@ -1,0 +1,28 @@
+version: '3'
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+    networks:
+      - app-network
+  varnish:
+    build: 
+      context: .
+      dockerfile: Dockerfile.varnish
+    ports:
+      - "80:80"
+    depends_on:
+      - web
+    environment:
+      - "VARNISH_HTTP_RESP_HDR_LEN=65536"
+    command: varnishd -F -f /usr/local/etc/varnish/default.vcl -s malloc,256m
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge

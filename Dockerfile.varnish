@@ -1,0 +1,6 @@
+FROM varnish:6.6
+
+RUN apt-get update && apt-get install -y curl
+
+COPY default.vcl /usr/local/etc/varnish/default.vcl
+COPY devicedetect.vcl /usr/local/etc/varnish/devicedetect.vcl
